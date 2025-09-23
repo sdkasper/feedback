@@ -1,7 +1,7 @@
 ---
 name: "🚀 Performance issue"
 about: Report slow or inefficient parts of the app
-title: "[PERFORMANCE] "
+title: "[PERF]"
 labels: performance
 ---
 
