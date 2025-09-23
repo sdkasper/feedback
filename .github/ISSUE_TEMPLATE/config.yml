@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: General Questions
+    url: https://github.com/<org>/<feedback-repo>/discussions
+    about: For open questions or ideas not yet ready as issues.
