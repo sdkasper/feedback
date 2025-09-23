@@ -22,7 +22,7 @@ jobs:
             if (labels.includes("status: needs triage")) status = "To triage";
             if (labels.includes("status: planned")) status = "Backlog";
             if (labels.includes("status: in progress")) status = "In progress";
-            if (labels.includes("status: in review")) status = "In review";
+            if (labels.includes("status: in review 🔍")) status = "In review";
             if (labels.includes("status: done")) status = "Done";
             if (labels.includes("status: wontfix")) status = "Done";
 
