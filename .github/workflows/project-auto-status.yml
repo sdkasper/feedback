@@ -11,13 +11,13 @@ jobs:
       - name: Map labels to Status
         uses: actions/github-script@v7
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.PROJECT_PAT }}
           script: |
             const { owner, repo } = context.repo;
             const issue = context.payload.issue;
             const labels = issue.labels.map(l => l.name);
 
-            // Map your labels → project status options
+            // Map your labels -> project status options
             let status = null;
             if (labels.includes("status: needs triage")) status = "To triage";
             if (labels.includes("status: planned")) status = "Backlog";
