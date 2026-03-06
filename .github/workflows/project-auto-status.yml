@@ -35,7 +35,7 @@ jobs:
               return;
             }
 
-            // Query project + fields
+            // Query project + fields (use inline fragment for union type)
             const projectNumber = 2;
             const project = await github.graphql(`
               query($owner: String!, $repo: String!, $projectNumber: Int!) {
@@ -43,7 +43,13 @@ jobs:
                   projectV2(number: $projectNumber) {
                     id
                     fields(first: 20) {
-                      nodes { id name dataType options { id name } }
+                      nodes {
+                        ... on ProjectV2SingleSelectField {
+                          id
+                          name
+                          options { id name }
+                        }
+                      }
                     }
                   }
                 }
@@ -64,18 +70,23 @@ jobs:
 
             // Find project item for this issue
             const items = await github.graphql(`
-              query($owner: String!, $repo: String!, $projectNumber: Int!, $issueId: ID!) {
-                repository(owner: $owner, name: $repo) {
-                  projectV2(number: $projectNumber) {
-                    items(first: 50, query: $issueId) {
-                      nodes { id content { ... on Issue { id } } }
+              query($projectId: ID!) {
+                node(id: $projectId) {
+                  ... on ProjectV2 {
+                    items(first: 100) {
+                      nodes {
+                        id
+                        content {
+                          ... on Issue { id }
+                        }
+                      }
                     }
                   }
                 }
               }
-            `, { owner, repo, projectNumber, issueId: issue.node_id });
+            `, { projectId });
 
-            const item = items.repository.projectV2.items.nodes.find(i => i.content && i.content.id === issue.node_id);
+            const item = items.node.items.nodes.find(i => i.content && i.content.id === issue.node_id);
             if (!item) {
               console.log("Issue is not yet in the project, skipping.");
               return;
